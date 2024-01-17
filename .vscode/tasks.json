@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "My Task",
+            "command": "g++",
+            "type": "shell",
+            "args": [
+                "-g",
+                "$(find",
+                "code",
+                "-type",
+                "f",
+                "-iregex",
+                "'.*\\.cpp')",
+                "-o",
+                "program"
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": "build"
+        }
+    ]
+}

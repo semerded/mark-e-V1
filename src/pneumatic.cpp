@@ -3,37 +3,37 @@ using namespace vex;
 
 class Pneumatic
 {
-  private:
-  bool leftArmExtended;
-  bool rightArmExtended;
-  public:
-  Pneumatic(bool *leftArmExtended, bool *rightArmExtended)
-  {
-    this->leftArmExtended = leftArmExtended;
-    this->rightArmExtended = rightArmExtended;
-  }
+private:
+    bool* leftArmExtended;
+    bool* rightArmExtended;
 
-  ~Pneumatic()
-  {}
+public:
+    Pneumatic(bool* leftArmExtended, bool* rightArmExtended)
+    {
+        this->leftArmExtended = leftArmExtended;
+        this->rightArmExtended = rightArmExtended;
+    }
 
-  void controller()
-  {
-  LeftArm.set(this->leftArmExtended);
-  RightArm.set(this->rightArmExtended);
-  }
+    ~Pneumatic()
+    {}
 
-  void extendAll()
-  {
-    this->leftArmExtended = true;
-    this->rightArmExtended = true;
-    controller();
-  }
+    void controller()
+    {
+        LeftArm.set(this->leftArmExtended);
+        RightArm.set(this->rightArmExtended);
+    }
 
-  void retractAll()
-  {
-    this->leftArmExtended = false;
-    this->rightArmExtended = false;
-  }
+    void extendAll()
+    {
+        *this->leftArmExtended = true;
+        *this->rightArmExtended = true;
+        controller();
+    }
 
+    void retractAll()
+    {
+        *this->leftArmExtended = false;
+        *this->rightArmExtended = false;
+        controller();
+    }
 };
-

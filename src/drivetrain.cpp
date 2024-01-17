@@ -6,7 +6,7 @@ class DriveTrain
   private:
   int8_t throttle;
   int8_t steering;
-  bool fullThrottle;
+  bool *fullThrottle;
 
   public:
   DriveTrain(bool *fullThrottle)
@@ -19,7 +19,6 @@ class DriveTrain
 
   void controllerDriving() 
   {
-    // this->fullThrottle = fullThrottle;
     readControllerValue();
     if (this->throttle == 0 && this->steering != 0)
     {
@@ -66,7 +65,7 @@ class DriveTrain
 
   void setDrivingSpeed(int8_t motorSpeedLeft, int8_t motorSpeedRight) 
   {
-    if (this->fullThrottle) 
+    if (*this->fullThrottle) 
     {
       LeftMainDriveTrain.spin(forward, motorSpeedLeft, percent);
       RightMainDriveTrain.spin(forward, motorSpeedRight, percent);
@@ -80,7 +79,7 @@ class DriveTrain
 
   void setSupportDriveSpeed(int8_t motorSpeedLeft, int8_t motorSpeedRight)
   {
-    if (this->fullThrottle) 
+    if (*this->fullThrottle) 
     {
       LeftSupportDrive.spin(forward, motorSpeedLeft, percent);
       RightSupportDrive.spin(forward, motorSpeedRight, percent);
@@ -94,7 +93,7 @@ class DriveTrain
 
   void mainTurning() 
   {
-    if (this->fullThrottle) 
+    if (*this->fullThrottle) 
     {
      LeftMainDriveTrain.spin(forward, this->steering / 2, percent);
      RightMainDriveTrain.spin(reverse, this->steering / 2, percent);
@@ -109,7 +108,7 @@ class DriveTrain
 
   void supportTurning() 
   {
-    if (this->fullThrottle) 
+    if (*this->fullThrottle) 
     {
      LeftSupportDrive.spin(forward, this->steering / 2, percent);
      RightSupportDrive.spin(forward, this->steering / 2, percent);
