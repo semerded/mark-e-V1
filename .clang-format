@@ -83,7 +83,7 @@ IndentGotoLabels: true
 IndentPPDirectives: None
 IndentExternBlock: AfterExternBlock
 IndentRequires: false
-IndentWidth: 4
+IndentWidth: 2
 IndentWrappedFunctionNames: false
 InsertTrailingCommas: None
 JavaScriptQuotes: Leave
@@ -153,7 +153,7 @@ SpacesInSquareBrackets: false
 SpaceBeforeSquareBrackets: false
 BitFieldColonSpacing: Both
 Standard: Latest
-TabWidth: 4
+TabWidth: 2
 UseCRLF: false
 UseTab: Never
 WhitespaceSensitiveMacros:

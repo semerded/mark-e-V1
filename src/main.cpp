@@ -34,46 +34,46 @@ bool rightArmExtended = false;
 
 void setDriveTrainSpeedMax()
 {
-    fullThrottle = true;
+  fullThrottle = true;
 }
 
 void setDriveTrainSpeedNormal()
 {
-    fullThrottle = false;
+  fullThrottle = false;
 }
 
 void leftArm()
 {
-    leftArmExtended = !leftArmExtended;
+  leftArmExtended = !leftArmExtended;
 }
 
 void rightArm()
 {
-    rightArmExtended = !rightArmExtended;
+  rightArmExtended = !rightArmExtended;
 }
 
 int main()
 {
-    DriveTrain driveTrain = DriveTrain(&fullThrottle);
-    Pneumatic pneumaticSystem = Pneumatic(&leftArmExtended, &rightArmExtended);
+  DriveTrain driveTrain = DriveTrain(&fullThrottle);
+  Pneumatic pneumaticSystem = Pneumatic(&leftArmExtended, &rightArmExtended);
 
-    LeftArm.set(false);
+  LeftArm.set(false);
 
-    // Brain.Screen.print("Hello World!");
-    while (true)
-    {
-        if (Controller1.ButtonR2.pressing())
-            Catapult.spin(forward);
-        else
-            Catapult.stop();
+  // Brain.Screen.print("Hello World!");
+  while (true)
+  {
+    if (Controller1.ButtonR2.pressing())
+      Catapult.spin(forward);
+    else
+      Catapult.stop();
 
-        pneumaticSystem.controller();
+    pneumaticSystem.controller();
 
-        Controller1.ButtonL1.pressed(leftArm);
-        Controller1.ButtonR1.pressed(rightArm);
-        Controller1.ButtonL2.pressed(setDriveTrainSpeedMax);
-        Controller1.ButtonL2.released(setDriveTrainSpeedNormal);
+    Controller1.ButtonL1.pressed(leftArm);
+    Controller1.ButtonR1.pressed(rightArm);
+    Controller1.ButtonL2.pressed(setDriveTrainSpeedMax);
+    Controller1.ButtonL2.released(setDriveTrainSpeedNormal);
 
-        driveTrain.controllerDriving();
-    }
+    driveTrain.controllerDriving();
+  }
 }
