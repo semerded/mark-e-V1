@@ -19,8 +19,8 @@ class Pneumatic
 
   void controller()
   {
-    LeftArm.set(this->leftArmExtended);
-    RightArm.set(this->rightArmExtended);
+    LeftArm.set(*this->leftArmExtended);
+    RightArm.set(*this->rightArmExtended);
   }
 
   void extendAll()

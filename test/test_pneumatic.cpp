@@ -31,6 +31,16 @@ public:
         *this->leftArmExtended = false;
         *this->rightArmExtended = false;
     }
+
+    bool getLeftStatus()
+    {
+        return *this->leftArmExtended;
+    }
+
+    bool getRightStatus()
+    {
+        return *this->rightArmExtended;
+    }
 };
 
 int main()
@@ -44,13 +54,23 @@ int main()
     assertFalse(leftArmExtended);
     assertFalse(rightArmExtended);
 
+    assertFalse(pneumaticTest.getLeftStatus());
+    assertFalse(pneumaticTest.getRightStatus());
+
     pneumaticTest.extendAll();
 
     assertTrue(leftArmExtended);
     assertTrue(rightArmExtended);
 
+    assertTrue(pneumaticTest.getLeftStatus());
+    assertTrue(pneumaticTest.getRightStatus());
+
     pneumaticTest.retractAll();
 
     assertFalse(leftArmExtended);
     assertFalse(rightArmExtended);
+
+    assertFalse(pneumaticTest.getLeftStatus());
+    assertFalse(pneumaticTest.getRightStatus());
+
 }
