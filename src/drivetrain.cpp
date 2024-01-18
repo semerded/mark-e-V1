@@ -1,4 +1,5 @@
 #include "vex.h"
+#include "vex_global.h"
 using namespace vex;
 
 class DriveTrain
@@ -109,12 +110,12 @@ class DriveTrain
     if (*this->fullThrottle)
     {
       LeftSupportDrive.spin(forward, this->steering / 2, percent);
-      RightSupportDrive.spin(forward, this->steering / 2, percent);
+      RightSupportDrive.spin(reverse, this->steering / 2, percent);
     }
     else
     {
       LeftSupportDrive.spin(forward, this->steering / 4, percent);
-      RightSupportDrive.spin(forward, this->steering / 4, percent);
+      RightSupportDrive.spin(reverse, this->steering / 4, percent);
     }
   }
 };
