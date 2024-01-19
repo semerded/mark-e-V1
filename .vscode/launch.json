@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/VaSe310806/OneDrive - MOSA-RT/STEAM/vex over under/mark-e cpp/mark-e V1/src",
-      "program": "c:/Users/VaSe310806/OneDrive - MOSA-RT/STEAM/vex over under/mark-e cpp/mark-e V1/src/build/Debug/outDebug",
+      "cwd": ".",
+      "program": "build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

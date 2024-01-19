@@ -11,6 +11,7 @@
 #include "drivetrain.cpp"
 #include "pneumatic.cpp"
 #include "vex.h"
+#include "vex_controller.h"
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
@@ -31,6 +32,8 @@ using namespace vex;
 bool fullThrottle = false;
 bool leftArmExtended = false;
 bool rightArmExtended = false;
+bool leftArmPressed = false;
+bool rightArmPressed = false;
 
 void setDriveTrainSpeedMax()
 {
@@ -52,6 +55,9 @@ void rightArm()
   rightArmExtended = !rightArmExtended;
 }
 
+void doNothing()
+{}
+
 int main()
 {
   DriveTrain driveTrain = DriveTrain(&fullThrottle);
@@ -69,8 +75,33 @@ int main()
 
     pneumaticSystem.controller();
 
-    Controller1.ButtonL1.pressed(leftArm);
-    Controller1.ButtonR1.pressed(rightArm);
+    // Controller1.ButtonL1.pressed(leftArm);
+    if (Controller1.ButtonL1.pressing())
+    {
+      if (!leftArmPressed)
+      {
+        leftArmPressed = true;
+        leftArm();
+      }
+    }
+    else
+    {
+      leftArmPressed = false;
+    }
+
+    if (Controller1.ButtonR1.pressing())
+    {
+      if (!rightArmPressed)
+      {
+        rightArmPressed = true;
+        rightArm();
+      }
+    }
+    else
+    {
+      rightArmPressed = false;
+    }
+    // Controller1.ButtonR1.pressed(rightArm);
     Controller1.ButtonL2.pressed(setDriveTrainSpeedMax);
     Controller1.ButtonL2.released(setDriveTrainSpeedNormal);
 
