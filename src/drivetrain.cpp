@@ -21,7 +21,7 @@ class DriveTrain
   void controllerDriving()
   {
     readControllerValue();
-    if (this->throttle == 0 && this->steering != 0)
+    if ((this->throttle < 5 && this->throttle > -5 ) && this->steering != 0)
     {
       mainTurning();
       supportTurning();
@@ -72,8 +72,8 @@ class DriveTrain
     }
     else
     {
-      LeftMainDriveTrain.spin(forward, motorSpeedLeft / 3, percent);
-      RightMainDriveTrain.spin(forward, motorSpeedRight / 3, percent);
+      LeftMainDriveTrain.spin(forward, motorSpeedLeft / 2.5, percent);
+      RightMainDriveTrain.spin(forward, motorSpeedRight / 2.5, percent);
     }
   }
 

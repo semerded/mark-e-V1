@@ -75,7 +75,6 @@ int main()
 
     pneumaticSystem.controller();
 
-    // Controller1.ButtonL1.pressed(leftArm);
     if (Controller1.ButtonL1.pressing())
     {
       if (!leftArmPressed)
@@ -88,7 +87,7 @@ int main()
     {
       leftArmPressed = false;
     }
-
+    
     if (Controller1.ButtonR1.pressing())
     {
       if (!rightArmPressed)
@@ -101,7 +100,6 @@ int main()
     {
       rightArmPressed = false;
     }
-    // Controller1.ButtonR1.pressed(rightArm);
     Controller1.ButtonL2.pressed(setDriveTrainSpeedMax);
     Controller1.ButtonL2.released(setDriveTrainSpeedNormal);
 
