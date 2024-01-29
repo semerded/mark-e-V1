@@ -2,6 +2,7 @@
 #include "drivetrain.cpp"
 #include "vex_global.h"
 #include "vex_motorgroup.h"
+#include <cstdint>
 
 class AutonomousPneumatic
 {
@@ -43,6 +44,17 @@ class AutonomousDriving
     {
         this->driveTrain = driveTrain;
     }
+
+    void drive(int8_t speedLeft, int8_t speedRight)
+    {
+        this->driveTrain->setDrivingSpeed(speedLeft, speedRight);
+        this->driveTrain->setSupportDriveSpeed(speedLeft, speedRight);
+    }
+
+    void stop()
+    {
+        drive(0, 0);
+    }
 };
 
 class AutonomousShooting
@@ -67,17 +79,4 @@ class AutonomousShooting
     {
         this->catapult.stop();
     }
-};
-
-class Autonomous: AutonomousPneumatic, AutonomousDriving, AutonomousShooting
-{
-    private:
-    public:
-    Autonomous(Pneumatic* pneumaticSystem, DriveTrain* driveTrain): AutonomousPneumatic(pneumaticSystem), AutonomousDriving(driveTrain), AutonomousShooting()
-    {
-        
-    }
-
-    ~Autonomous() 
-    {}
 };

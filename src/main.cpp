@@ -37,7 +37,7 @@ bool rightArmPressed = false;
 
 DriveTrain driveTrain = DriveTrain(&fullThrottle);
 Pneumatic pneumaticSystem = Pneumatic(&leftArmExtended, &rightArmExtended);
-ScreenInfo screenInfo = ScreenInfo(0);
+// ScreenInfo screenInfo = ScreenInfo(0);
 
 void setDriveTrainSpeedMax()
 {
@@ -107,8 +107,8 @@ int driveControll()
 
     driveTrain.controllerDriving();
 
-    screenInfo.clear();
-    screenInfo.print();
+    // screenInfo.clear();
+    // screenInfo.print();
   }
   return 0;
 }

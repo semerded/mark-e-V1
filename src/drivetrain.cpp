@@ -32,7 +32,6 @@ class DriveTrain
     }
   }
 
-  private:
   void readControllerValue()
   {
     this->throttle = Controller1.Axis3.position();
