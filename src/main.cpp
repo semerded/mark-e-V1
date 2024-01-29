@@ -8,10 +8,10 @@
 /*----------------------------------------------------------------------------*/
 
 // Include the V5 Library
-#include "drivetrain.cpp"
-#include "pneumatic.cpp"
+#include "screenInfo.cpp"
 #include "vex.h"
 #include "vex_controller.h"
+#include "autoCode.cpp"
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
@@ -35,6 +35,10 @@ bool rightArmExtended = false;
 bool leftArmPressed = false;
 bool rightArmPressed = false;
 
+DriveTrain driveTrain = DriveTrain(&fullThrottle);
+Pneumatic pneumaticSystem = Pneumatic(&leftArmExtended, &rightArmExtended);
+ScreenInfo screenInfo = ScreenInfo(0);
+
 void setDriveTrainSpeedMax()
 {
   fullThrottle = true;
@@ -55,19 +59,17 @@ void rightArm()
   rightArmExtended = !rightArmExtended;
 }
 
-void doNothing()
-{}
-
-int main()
+int autonomous()
 {
-  DriveTrain driveTrain = DriveTrain(&fullThrottle);
-  Pneumatic pneumaticSystem = Pneumatic(&leftArmExtended, &rightArmExtended);
+  startAutonomus(&pneumaticSystem, &driveTrain);
+  return 0;
+}
 
-  LeftArm.set(false);
-
-  // Brain.Screen.print("Hello World!");
+int driveControll()
+{
   while (true)
   {
+
     if (Controller1.ButtonR2.pressing())
       Catapult.spin(forward);
     else
@@ -87,7 +89,7 @@ int main()
     {
       leftArmPressed = false;
     }
-    
+
     if (Controller1.ButtonR1.pressing())
     {
       if (!rightArmPressed)
@@ -104,5 +106,19 @@ int main()
     Controller1.ButtonL2.released(setDriveTrainSpeedNormal);
 
     driveTrain.controllerDriving();
+
+    screenInfo.clear();
+    screenInfo.print();
   }
+  return 0;
+}
+
+int main()
+{
+
+  LeftArm.set(false);
+
+  Brain.Screen.print("Hello World!");
+  autonomous();
+  driveControll();
 }

@@ -23,6 +23,16 @@ class Pneumatic
     RightArm.set(*this->rightArmExtended);
   }
 
+  void setLeft(bool extended)
+  {
+    LeftArm.set(extended);
+  }
+
+  void setRight(bool extended)
+  {
+    LeftArm.set(extended);
+  }
+
   void extendAll()
   {
     *this->leftArmExtended = true;
