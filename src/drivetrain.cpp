@@ -1,5 +1,6 @@
 #include "vex.h"
 #include "vex_global.h"
+#include <cstdint>
 using namespace vex;
 
 class DriveTrain
@@ -21,24 +22,31 @@ class DriveTrain
   void controllerDriving()
   {
     readControllerValue();
-    if ((this->throttle < 5 && this->throttle > -5 ) && this->steering != 0)
+    if ((this->throttle < 5 && this->throttle > -5) && this->steering != 0)
     {
-      mainTurning();
-      supportTurning();
+      if (*this->fullThrottle)
+      {
+        setTurningSpeed(this->steering / 2);
+      }
+      else
+      {
+        setTurningSpeed(this->steering / 4);
+      }
     }
     else
     {
-      mainDriving();
+      calculateMotorSpeed(); // drive
     }
   }
 
+  private:
   void readControllerValue()
   {
     this->throttle = Controller1.Axis3.position();
     this->steering = Controller1.Axis1.position();
   }
 
-  void mainDriving()
+  void calculateMotorSpeed()
   {
     int8_t motorSpeedLeft = this->throttle;
     int8_t motorSpeedRight = this->throttle;
@@ -58,63 +66,36 @@ class DriveTrain
         motorSpeedRight *= -1;
       }
     }
-    setDrivingSpeed(motorSpeedLeft, motorSpeedRight);
-    setSupportDriveSpeed(motorSpeedLeft, motorSpeedRight);
-  }
-
-  void setDrivingSpeed(int8_t motorSpeedLeft, int8_t motorSpeedRight)
-  {
     if (*this->fullThrottle)
     {
-      LeftMainDriveTrain.spin(forward, motorSpeedLeft, percent);
-      RightMainDriveTrain.spin(forward, motorSpeedRight, percent);
+      setDriveSpeed(motorSpeedLeft, motorSpeedRight);
     }
     else
     {
-      LeftMainDriveTrain.spin(forward, motorSpeedLeft / 2.5, percent);
-      RightMainDriveTrain.spin(forward, motorSpeedRight / 2.5, percent);
+      setDriveSpeed(motorSpeedLeft / 2.5, motorSpeedRight / 2.5);
     }
   }
 
-  void setSupportDriveSpeed(int8_t motorSpeedLeft, int8_t motorSpeedRight)
+  public:
+  void setDriveSpeed(int8_t motorSpeedLeft, int8_t motorSpeedRight)
   {
-    if (*this->fullThrottle)
-    {
-      LeftSupportDrive.spin(forward, motorSpeedLeft, percent);
-      RightSupportDrive.spin(forward, motorSpeedRight, percent);
-    }
-    else
-    {
-      LeftSupportDrive.spin(forward, motorSpeedLeft / 3, percent);
-      RightSupportDrive.spin(forward, motorSpeedRight / 3, percent);
-    }
+    LeftMainDriveTrain.spin(forward, motorSpeedLeft, percent);
+    LeftSupportDrive.spin(forward, motorSpeedLeft, percent);
+    RightMainDriveTrain.spin(forward, motorSpeedRight, percent);
+    RightSupportDrive.spin(forward, motorSpeedRight, percent);
   }
 
-  void mainTurning()
+  void setTurningSpeed(int8_t turningSpeed)
   {
-    if (*this->fullThrottle)
-    {
-      LeftMainDriveTrain.spin(forward, this->steering / 2, percent);
-      RightMainDriveTrain.spin(reverse, this->steering / 2, percent);
-    }
-    else
-    {
-      LeftMainDriveTrain.spin(forward, this->steering / 4, percent);
-      RightMainDriveTrain.spin(reverse, this->steering / 4, percent);
-    }
+    LeftMainDriveTrain.spin(forward, this->steering, percent);
+    RightMainDriveTrain.spin(reverse, this->steering, percent);
+
+    LeftSupportDrive.spin(forward, this->steering, percent);
+    RightSupportDrive.spin(reverse, this->steering, percent);
   }
 
-  void supportTurning()
+  void overwriteFullThrottle(bool status)
   {
-    if (*this->fullThrottle)
-    {
-      LeftSupportDrive.spin(forward, this->steering / 2, percent);
-      RightSupportDrive.spin(reverse, this->steering / 2, percent);
-    }
-    else
-    {
-      LeftSupportDrive.spin(forward, this->steering / 4, percent);
-      RightSupportDrive.spin(reverse, this->steering / 4, percent);
-    }
+    *this->fullThrottle = status;
   }
 };

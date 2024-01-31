@@ -1,82 +1,112 @@
-#include "pneumatic.cpp"
 #include "drivetrain.cpp"
+#include "pneumatic.cpp"
 #include "vex_global.h"
 #include "vex_motorgroup.h"
+#include "vex_units.h"
 #include <cstdint>
+#include <sys/types.h>
 
-class AutonomousPneumatic
+class AutonomousPneumatic: Pneumatic
 {
-    private:
-    Pneumatic* pneumatic;
-    public:
-    AutonomousPneumatic(Pneumatic* pneumaticSystem)
-    {
-        this->pneumatic = pneumaticSystem;
-    }
+  private:
+  bool leftArm = false;
+  bool rightArm = false;
 
-    void changeLeft(bool extended)
-    {
-        this->pneumatic->setLeft(extended);
-    }
+  public:
+  AutonomousPneumatic(): Pneumatic(&leftArm, &rightArm)
+  {}
 
-    void changeRight(bool extended)
-    {
-        this->pneumatic->setRight(extended);
-    }
+  void changeLeft(bool extended)
+  {
+    setLeft(extended);
+  }
 
-    void extendAll()
-    {
-        this->pneumatic->extendAll();
-    }
+  void changeRight(bool extended)
+  {
+    setRight(extended);
+  }
 
-    void retractAll()
-    {
-        this->pneumatic->retractAll();
-    }
+  void extendAll()
+  {
+    Pneumatic::extendAll();
+  }
+
+  void retractAll()
+  {
+    Pneumatic::retractAll();
+  }
 };
 
-class AutonomousDriving
+class AutonomousDriving : DriveTrain
 {
-    private:
-    DriveTrain* driveTrain;
-    public:
-    AutonomousDriving(DriveTrain* driveTrain)
-    {
-        this->driveTrain = driveTrain;
-    }
+  private:
+  bool fullThrottle;
 
-    void drive(int8_t speedLeft, int8_t speedRight)
-    {
-        this->driveTrain->setDrivingSpeed(speedLeft, speedRight);
-        this->driveTrain->setSupportDriveSpeed(speedLeft, speedRight);
-    }
+  public:
+  AutonomousDriving()
+      : DriveTrain(&fullThrottle)
+  {}
 
-    void stop()
+  void setFullThrottle(bool status)
+  {
+    overwriteFullThrottle(status);
+  }
+
+  void drive(int8_t speedLeft, int8_t speedRight)
+  {
+    setDriveSpeed(speedLeft, speedRight);
+  }
+
+  void driveFor(int8_t speedLeft, int8_t speedRight, int millisec)
+  {
+    drive(speedLeft, speedRight);
+    wait(millisec, msec);
+    stop();
+  }
+
+  void turn(turnType direction, uint8_t turningSpeed)
+  {
+    if (direction == left)
     {
-        drive(0, 0);
+      turningSpeed *= -1;
     }
+    setTurningSpeed(turningSpeed);
+  }
+
+  void turnFor(turnType direction, uint8_t turningSpeed, int millisec)
+  {
+    turn(direction, turningSpeed);
+    wait(millisec, msec);
+    stop();
+  }
+
+  void stop()
+  {
+    drive(0, 0);
+  }
 };
 
 class AutonomousShooting
 {
-    private:
-    motor_group catapult = Catapult;
-    public:
-    AutonomousShooting()
-    {}
+  private:
+  motor_group catapult = Catapult;
 
-    void shootOnce()
-    {
-        this->catapult.spinFor(forward, 360, degrees);
-    }
+  public:
+  AutonomousShooting()
+  {}
 
-    void startShooting()
-    {
-        this->catapult.spin(forward);
-    }
+  void shootOnce()
+  {
+    this->catapult.spinFor(forward, 360, degrees);
+  }
 
-    void stopShooting()
-    {
-        this->catapult.stop();
-    }
+  void startShooting()
+  {
+    this->catapult.spin(forward);
+  }
+
+  void stopShooting()
+  {
+    this->catapult.stop();
+  }
 };

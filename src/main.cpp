@@ -10,8 +10,12 @@
 // Include the V5 Library
 #include "screenInfo.cpp"
 #include "vex.h"
+#include "vex_brain.h"
+#include "vex_competition.h"
 #include "vex_controller.h"
+#include "vex_global.h"
 #include "autoCode.cpp"
+
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
@@ -37,7 +41,13 @@ bool rightArmPressed = false;
 
 DriveTrain driveTrain = DriveTrain(&fullThrottle);
 Pneumatic pneumaticSystem = Pneumatic(&leftArmExtended, &rightArmExtended);
+competition Competition;
+Autonomous autonomous = Autonomous();
+
 // ScreenInfo screenInfo = ScreenInfo(0);
+
+
+
 
 void setDriveTrainSpeedMax()
 {
@@ -57,12 +67,6 @@ void leftArm()
 void rightArm()
 {
   rightArmExtended = !rightArmExtended;
-}
-
-int autonomous()
-{
-  startAutonomus(&pneumaticSystem, &driveTrain);
-  return 0;
 }
 
 int driveControll()
@@ -119,6 +123,19 @@ int main()
   LeftArm.set(false);
 
   Brain.Screen.print("Hello World!");
-  autonomous();
-  driveControll();
+  while (true)
+  {
+    if (Competition.isAutonomous() && Competition.isEnabled())
+    {
+      autonomous.startAutonomous();
+    }
+    else if (Competition.isDriverControl() && Competition.isEnabled())
+    {
+      driveControll();
+    }
+    else
+    {
+      Brain.Screen.print("waiting");
+    }
+  }
 }

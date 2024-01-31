@@ -1,12 +1,20 @@
 #include "autonomous.cpp"
 
-void startAutonomus(Pneumatic* pneumaticSystem, DriveTrain* driveTrain)
+struct Autonomous
 {
+  Autonomous()
+  {}
+
+  void startAutonomous()
+  {
     AutonomousShooting shoot = AutonomousShooting();
-    AutonomousDriving drive = AutonomousDriving(driveTrain);
-    AutonomousPneumatic pneumatic = AutonomousPneumatic(pneumaticSystem);
+    AutonomousDriving drive = AutonomousDriving();
+    AutonomousPneumatic pneumatic = AutonomousPneumatic();
 
     // start of autonomous code
     shoot.shootOnce();
-    drive.drive(100, 100);
-}
+    drive.setFullThrottle(true);
+    drive.driveFor(100, 100, 200);
+    drive.turnFor(right, 100, 100);
+  }
+};
