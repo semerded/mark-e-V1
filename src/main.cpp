@@ -121,6 +121,7 @@ int main()
 {
 
   LeftArm.set(false);
+  RightArm.set(false);
 
   Brain.Screen.print("Hello World!");
   while (true)
@@ -135,6 +136,7 @@ int main()
     }
     else
     {
+      Brain.Screen.clearScreen();
       Brain.Screen.print("waiting");
     }
   }
