@@ -60,7 +60,7 @@ class AutonomousDriving : DriveTrain
   void driveFor(int8_t speedLeft, int8_t speedRight, int millisec)
   {
     drive(speedLeft, speedRight);
-    wait(millisec, msec);
+    vex::wait(millisec, msec);
     stop();
   }
 
@@ -76,13 +76,18 @@ class AutonomousDriving : DriveTrain
   void turnFor(turnType direction, uint8_t turningSpeed, int millisec)
   {
     turn(direction, turningSpeed);
-    wait(millisec, msec);
+    vex::wait(millisec, msec);
     stop();
   }
 
   void stop()
   {
     drive(0, 0);
+  }
+
+  void wait()
+  {
+    vex::wait(200, msec);
   }
 };
 

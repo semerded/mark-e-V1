@@ -123,7 +123,7 @@ int main()
   LeftArm.set(false);
   RightArm.set(false);
 
-  Brain.Screen.print("Hello World!");
+  // Brain.Screen.print("Hello World!");
   while (true)
   {
     if (Competition.isAutonomous() && Competition.isEnabled())
