@@ -1,4 +1,5 @@
 #include "autonomous.cpp"
+#include "vex_global.h"
 
 struct Autonomous
 {
@@ -12,9 +13,15 @@ struct Autonomous
     AutonomousPneumatic pneumatic = AutonomousPneumatic();
 
     // start of autonomous code
-    shoot.shootOnce();
-    drive.setFullThrottle(true);
+    drive.setFullThrottle(false);
     drive.driveFor(100, 100, 200);
-    drive.turnFor(right, 100, 100);
+    shoot.shootOnce();
+    drive.wait();
+    drive.driveFor(100, 100, 1200);
+    drive.wait();
+    drive.turnFor(right, 100, 600);
+    drive.wait();
+    drive.driveFor(100, 100, 500);
+    vex::wait(2, sec);
   }
 };
