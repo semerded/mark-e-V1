@@ -87,11 +87,11 @@ class DriveTrain
 
   void setTurningSpeed(int8_t turningSpeed)
   {
-    LeftMainDriveTrain.spin(forward, this->steering, percent);
-    RightMainDriveTrain.spin(reverse, this->steering, percent);
+    LeftMainDriveTrain.spin(forward, turningSpeed, percent);
+    RightMainDriveTrain.spin(reverse, turningSpeed, percent);
 
-    LeftSupportDrive.spin(forward, this->steering, percent);
-    RightSupportDrive.spin(reverse, this->steering, percent);
+    LeftSupportDrive.spin(forward, turningSpeed, percent);
+    RightSupportDrive.spin(reverse, turningSpeed, percent);
   }
 
   void overwriteFullThrottle(bool status)
