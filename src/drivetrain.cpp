@@ -9,11 +9,13 @@ class DriveTrain
   int8_t throttle;
   int8_t steering;
   bool* fullThrottle;
+  bool* topSpeed;
 
   public:
-  DriveTrain(bool* fullThrottle)
+  DriveTrain(bool* fullThrottle, bool* topSpeed)
   {
     this->fullThrottle = fullThrottle;
+    this->topSpeed = topSpeed;
   }
 
   ~DriveTrain()

@@ -41,15 +41,16 @@ class AutonomousDriving : DriveTrain
 {
   private:
   bool fullThrottle;
+  bool topSpeed;
 
   public:
   AutonomousDriving()
-      : DriveTrain(&fullThrottle)
+      : DriveTrain(&fullThrottle, &topSpeed)
   {}
 
   void setFullThrottle(bool status)
   {
-    overwriteFullThrottle(status);
+    this->fullThrottle = status;
   }
 
   void drive(int8_t speedLeft, int8_t speedRight)
@@ -66,7 +67,7 @@ class AutonomousDriving : DriveTrain
 
   void turn(turnType direction, uint8_t turningSpeed)
   {
-    if (direction == left)
+    if (direction == vex::turnType::left)
     {
       turningSpeed *= -1;
     }
@@ -87,7 +88,8 @@ class AutonomousDriving : DriveTrain
 
   void wait()
   {
-    vex::wait(200, msec);
+    stop();
+    vex::wait(1, sec);
   }
 };
 

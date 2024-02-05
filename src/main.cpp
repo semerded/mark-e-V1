@@ -15,6 +15,10 @@
 #include "vex_controller.h"
 #include "vex_global.h"
 #include "autoCode.cpp"
+#include "vex_task.h"
+#include "vex_thread.h"
+#include "buttonReader.cpp"
+#include "vex_units.h"
 
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
@@ -34,12 +38,14 @@
 using namespace vex;
 
 bool fullThrottle = false;
+bool topSpeed = true;
+bool topSpeedPressed;
 bool leftArmExtended = false;
 bool rightArmExtended = false;
 bool leftArmPressed = false;
 bool rightArmPressed = false;
 
-DriveTrain driveTrain = DriveTrain(&fullThrottle);
+DriveTrain driveTrain = DriveTrain(&fullThrottle, &topSpeed);
 Pneumatic pneumaticSystem = Pneumatic(&leftArmExtended, &rightArmExtended);
 competition Competition;
 Autonomous autonomous = Autonomous();
@@ -59,6 +65,11 @@ void setDriveTrainSpeedNormal()
   fullThrottle = false;
 }
 
+void setTopSpeed()
+{
+  topSpeed = !topSpeed;
+}
+
 void leftArm()
 {
   leftArmExtended = !leftArmExtended;
@@ -69,7 +80,8 @@ void rightArm()
   rightArmExtended = !rightArmExtended;
 }
 
-int driveControll()
+// ButtonReader test = ButtonReader(Controller1.ButtonA.pressing)
+int driveControl()
 {
   while (true)
   {
@@ -106,6 +118,14 @@ int driveControll()
     {
       rightArmPressed = false;
     }
+
+    // if (Controller1.ButtonY.pressing())
+    // {
+    //   if (!topSpeedPressed)
+    //   {
+    //     topsp
+    //   }
+    // }
     Controller1.ButtonL2.pressed(setDriveTrainSpeedMax);
     Controller1.ButtonL2.released(setDriveTrainSpeedNormal);
 
@@ -117,27 +137,41 @@ int driveControll()
   return 0;
 }
 
+void drivercontrolTask()
+{
+  task driverCode(driveControl);
+  while (Competition.isDriverControl() && Competition.isEnabled())
+  {
+    this_thread::sleep_for(10);
+  }
+  driverCode.stop();
+}
+
+int startAutonomous()
+{
+  autonomous.startAutonomous();
+  return 0;
+}
+
+void startAutonomousTask()
+{
+  task autoCode(startAutonomous);
+  while(Competition.isAutonomous() && Competition.isEnabled())
+  {
+    this_thread::sleep_for(10);
+  }
+  autoCode.stop();
+  return;
+}
+
 int main()
 {
-
   LeftArm.set(false);
   RightArm.set(false);
 
+  Brain.Screen.setFont(vex::fontType::mono60);
   Brain.Screen.print("Hello World!");
-  while (true)
-  {
-    if (Competition.isAutonomous() && Competition.isEnabled())
-    {
-      autonomous.startAutonomous();
-    }
-    else if (Competition.isDriverControl() && Competition.isEnabled())
-    {
-      driveControll();
-    }
-    else
-    {
-      Brain.Screen.clearScreen();
-      Brain.Screen.print("waiting");
-    }
-  }
+  competition::bStopAllTasksBetweenModes = false;
+  Competition.autonomous(startAutonomousTask);
+  Competition.drivercontrol(drivercontrolTask);
 }
