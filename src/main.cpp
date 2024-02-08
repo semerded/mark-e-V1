@@ -8,7 +8,6 @@
 /*----------------------------------------------------------------------------*/
 
 // Include the V5 Library
-#include "screenInfo.cpp"
 #include "vex.h"
 #include "vex_brain.h"
 #include "vex_competition.h"
@@ -44,6 +43,7 @@ bool leftArmExtended = false;
 bool rightArmExtended = false;
 bool leftArmPressed = false;
 bool rightArmPressed = false;
+bool changeAllArm = false;
 
 DriveTrain driveTrain = DriveTrain(&fullThrottle, &topSpeed);
 Pneumatic pneumaticSystem = Pneumatic(&leftArmExtended, &rightArmExtended);
@@ -70,16 +70,6 @@ void setTopSpeed()
   topSpeed = !topSpeed;
 }
 
-void leftArm()
-{
-  leftArmExtended = !leftArmExtended;
-}
-
-void rightArm()
-{
-  rightArmExtended = !rightArmExtended;
-}
-
 // ButtonReader test = ButtonReader(Controller1.ButtonA.pressing)
 int driveControl()
 {
@@ -98,7 +88,7 @@ int driveControl()
       if (!leftArmPressed)
       {
         leftArmPressed = true;
-        leftArm();
+        leftArmExtended = !leftArmExtended;
       }
     }
     else
@@ -111,12 +101,25 @@ int driveControl()
       if (!rightArmPressed)
       {
         rightArmPressed = true;
-        rightArm();
+        rightArmExtended = !rightArmExtended;
       }
     }
     else
     {
       rightArmPressed = false;
+    }
+
+    if (Controller1.ButtonA.pressing())
+    {
+      if (!changeAllArm)
+      {
+        changeAllArm = true;
+        if (leftArmExtended || rightArmExtended)
+        {
+          pneumaticSystem.retractAll();
+        } else {
+          pneumaticSystem.extendAll();        }
+      }
     }
 
     // if (Controller1.ButtonY.pressing())
