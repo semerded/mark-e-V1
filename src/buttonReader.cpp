@@ -5,13 +5,13 @@ using namespace vex;
 class ButtonReader
 {
   private:
-  bool* button;
+  bool *buttonStatus;
   bool buttonPressed = false;
 
   public:
-  ButtonReader(bool* button)
+  ButtonReader(bool* buttonStatus)
   {
-    this->button = button;
+    this->buttonStatus = buttonStatus;
   }
 
   ~ButtonReader()
@@ -19,7 +19,7 @@ class ButtonReader
 
   bool onPressed()
   {
-    if (*this->button)
+    if (*this->buttonStatus)
     {
       if (!this->buttonPressed)
       {

@@ -9,13 +9,13 @@ class DriveTrain
   int8_t throttle;
   int8_t steering;
   bool* fullThrottle;
-  bool* topSpeed;
+  bool* supportDriveActive;
 
   public:
-  DriveTrain(bool* fullThrottle, bool* topSpeed)
+  DriveTrain(bool* fullThrottle, bool* supportDriveActive)
   {
     this->fullThrottle = fullThrottle;
-    this->topSpeed = topSpeed;
+    this->supportDriveActive = supportDriveActive;
   }
 
   ~DriveTrain()
@@ -82,9 +82,13 @@ class DriveTrain
   void setDriveSpeed(int8_t motorSpeedLeft, int8_t motorSpeedRight)
   {
     LeftMainDriveTrain.spin(forward, motorSpeedLeft, percent);
-    LeftSupportDrive.spin(forward, motorSpeedLeft, percent);
     RightMainDriveTrain.spin(forward, motorSpeedRight, percent);
-    RightSupportDrive.spin(forward, motorSpeedRight, percent);
+
+    if (*this->supportDriveActive)
+    {
+      LeftSupportDrive.spin(forward, motorSpeedLeft, percent);
+      RightSupportDrive.spin(forward, motorSpeedRight, percent);
+    }
   }
 
   void setTurningSpeed(int8_t turningSpeed)
@@ -92,8 +96,12 @@ class DriveTrain
     LeftMainDriveTrain.spin(forward, turningSpeed, percent);
     RightMainDriveTrain.spin(reverse, turningSpeed, percent);
 
-    LeftSupportDrive.spin(forward, turningSpeed, percent);
-    RightSupportDrive.spin(reverse, turningSpeed, percent);
+    if (*this->supportDriveActive)
+    {
+      LeftSupportDrive.spin(forward, turningSpeed, percent);
+      RightSupportDrive.spin(reverse, turningSpeed, percent);
+      ;
+    }
   }
 
   void overwriteFullThrottle(bool status)
